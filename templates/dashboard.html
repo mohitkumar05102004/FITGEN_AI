@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- =========================
+        Analytics Cards
+    ========================== -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-heart-pulse card-icon"></i>
+
+                <h6>BMI</h6>
+
+                <h2>{{ bmi }}</h2>
+
+                <span class="badge bg-light text-dark">
+
+                    {{ bmi_result }}
+
+                </span>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-fire card-icon"></i>
+
+                <h6>Calories</h6>
+
+                <h2>{{ daily_calories }}</h2>
+
+                <small>kcal/day</small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-drumstick-bite card-icon"></i>
+
+                <h6>Protein</h6>
+
+                <h2>{{ daily_protein }} g</h2>
+
+                <small>Daily Target</small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="dashboard-card">
+
+                <i class="fa-solid fa-glass-water card-icon"></i>
+
+                <h6>Water</h6>
+
+                <h2>{{ daily_water }} L</h2>
+
+                <small>Per Day</small>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            
+            <div class="dashboard-card">
+
+            <i class="fa-solid fa-weight-scale card-icon"></i>
+
+            <h6>Current Weight</h6>
+
+            <h2>{{ current_weight }} kg</h2>
+
+            <small>Latest Progress</small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- =========================
+        AI Coach
+    ========================== -->
+
+    <div class="glass-card text-center mb-4">
+
+        <h3>🤖 AI Fitness Coach</h3>
+
+        <p>
+
+            Generate a fresh workout and diet plan using AI.
+
+        </p>
+
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+    <a href="/generate-plan"
+       class="btn btn-gradient btn-lg">
+
+        <i class="fa-solid fa-robot"></i>
+
+        Generate New AI Plan
+
+    </a>
+
+    <a href="/report"
+       class="btn btn-danger btn-lg">
+
+        <i class="fa-solid fa-file-pdf"></i>
+
+        Download Report
+
+    </a>
+
+    </div>
+
+
+    </div>
+
+    <!-- =========================
+        Today's Workout
+    ========================== -->
+
+    <div class="glass-card mb-4">
+
+        <div class="d-flex justify-content-between">
+
+            <h3>
+
+                📅 Today's Workout
+
+            </h3>
+
+            <span class="badge bg-primary">
+
+                {{ today }}
+
+            </span>
+
+        </div>
+
+        <hr>
+
+        {% if today_workout %}
+
+            <div class="progress mb-3">
+
+                <div
+
+                    class="progress-bar progress-bar-striped progress-bar-animated"
+
+                    id="todayProgress"
+
+                    style="width:0%">
+
+                </div>
+
+            </div>
+
+            <p>
+
+                <strong>
+
+                    Completed
+
+                    <span id="completedCount">
+
+                        0
+
+                    </span>
+
+                    /
+
+                    {{ total_exercises }}
+
+                </strong>
+
+            </p>
+
+            {% for exercise in today_workout %}
+
+            <div class="form-check mb-2">
+
+                <input
+
+                    class="form-check-input workout-check"
+
+                    type="checkbox">
+
+                <label class="form-check-label">
+
+                    {{ exercise }}
+
+                </label>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <div class="text-center">
+
+                <h4>
+
+                    🎉 Rest Day
+
+                </h4>
+
+                <p>
+
+                    Recovery is important too.
+
+                </p>
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+    <!-- =========================
+        Workout + Diet
+    ========================== -->
+
+    <div class="row">
+
+        <div class="col-lg-7">
+
+            <div class="glass-card">
+
+                <h3>
+
+                    🏋 Weekly Workout
+
+                </h3>
+
+                <hr>
+
+                {% if workout %}
+
+                    {% for day, exercises in workout.items() %}
+
+                    <div class="day-card">
+
+                        <h5>
+
+                            {{ day }}
+
+                        </h5>
+
+                        <ul class="list-group list-group-flush">
+
+                            {% for exercise in exercises %}
+
+                            <li class="list-group-item">
+
+                                <i class="fa-solid fa-dumbbell text-primary"></i>
+
+                                {{ exercise }}
+
+                            </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="text-center p-5">
+
+                        <h4>
+
+                            No Workout Yet
+
+                        </h4>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-5">
+
+            <div class="glass-card">
+
+                <h3>
+
+                    🥗 Diet Plan
+
+                </h3>
+
+                <hr>
+
+                {% if diet %}
+
+                    {% for meal, food in diet.items() %}
+
+                    <div class="meal-card">
+
+                        <h5>
+
+                            {{ meal }}
+
+                        </h5>
+
+                        <p>
+
+                            {{ food }}
+
+                        </p>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="text-center p-5">
+
+                        <h4>
+
+                            No Diet Plan
+
+                        </h4>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+            {% if plan %}
+
+            <div class="glass-card">
+
+                <h3>
+
+                    💡 Motivation
+
+                </h3>
+
+                <hr>
+
+                <p class="lead">
+
+                    "{{ plan.motivation }}"
+
+                </p>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const checks=document.querySelectorAll(".workout-check");
+
+const progress=document.getElementById("todayProgress");
+
+const completed=document.getElementById("completedCount");
+
+checks.forEach(box=>{
+
+box.addEventListener("change",()=>{
+
+let done=0;
+
+checks.forEach(c=>{
+
+if(c.checked) done++;
+
+});
+
+completed.innerHTML=done;
+
+progress.style.width=((done/checks.length)*100)+"%";
+
+});
+
+});
+
+</script>
+
+{% endblock %}

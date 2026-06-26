@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="glass-card">
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2>
+                    🤖 FitGen AI Coach
+                </h2>
+
+                <p class="text-muted">
+                    Ask anything about fitness, nutrition, workouts, weight loss or muscle gain.
+                </p>
+
+            </div>
+
+            <button
+                class="btn btn-outline-danger"
+                onclick="clearChat()">
+
+                <i class="fa-solid fa-trash"></i>
+
+                Clear Chat
+
+            </button>
+
+        </div>
+
+        <div
+            id="chatBox"
+            class="border rounded p-3 mb-4"
+            style="
+                height:500px;
+                overflow-y:auto;
+                background:#f8f9fa;
+            ">
+
+            <div class="alert alert-primary">
+
+                👋 Hello {{ current_user.name }}!
+
+                <br><br>
+
+                Ask me anything about
+
+                <ul class="mt-2 mb-0">
+
+                    <li>Workout Plans</li>
+
+                    <li>Weight Gain</li>
+
+                    <li>Weight Loss</li>
+
+                    <li>Protein Intake</li>
+
+                    <li>Gym Exercises</li>
+
+                    <li>Vegetarian Diet</li>
+
+                </ul>
+
+            </div>
+
+        </div>
+
+        <div class="mb-4">
+
+            <h5>
+
+                💡 Quick Questions
+
+            </h5>
+
+            <button class="btn btn-outline-primary btn-sm m-1 quick">
+                How much protein do I need?
+            </button>
+
+            <button class="btn btn-outline-primary btn-sm m-1 quick">
+                Suggest a vegetarian diet.
+            </button>
+
+            <button class="btn btn-outline-primary btn-sm m-1 quick">
+                Give me a home workout.
+            </button>
+
+            <button class="btn btn-outline-primary btn-sm m-1 quick">
+                Can I gain muscle without whey?
+            </button>
+
+        </div>
+
+        <div class="input-group">
+
+            <input
+
+                id="message"
+
+                type="text"
+
+                class="form-control"
+
+                placeholder="Ask FitGen AI anything...">
+
+            <button
+
+                id="sendBtn"
+
+                class="btn btn-gradient">
+
+                <i class="fa-solid fa-paper-plane"></i>
+
+                Send
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const chat=document.getElementById("chatBox");
+
+function addUser(message){
+
+chat.innerHTML+=`
+<div class="text-end mb-3">
+<div class="alert alert-primary d-inline-block">
+${message}
+</div>
+</div>
+`;
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+function addAI(message){
+
+chat.innerHTML+=`
+<div class="mb-3">
+<div class="alert alert-success d-inline-block">
+${message}
+</div>
+</div>
+`;
+
+chat.scrollTop=chat.scrollHeight;
+
+}
+
+function clearChat(){
+
+chat.innerHTML=`
+<div class="alert alert-primary">
+
+👋 Hello {{ current_user.name }}!
+
+<br><br>
+
+Ask me anything about
+
+<ul class="mt-2 mb-0">
+
+<li>Workout Plans</li>
+
+<li>Weight Gain</li>
+
+<li>Weight Loss</li>
+
+<li>Protein Intake</li>
+
+<li>Gym Exercises</li>
+
+<li>Vegetarian Diet</li>
+
+</ul>
+
+</div>
+`;
+
+}
+
+document.querySelectorAll(".quick").forEach(btn=>{
+
+btn.onclick=()=>{
+
+document.getElementById("message").value=btn.innerText;
+
+};
+
+});
+
+document.getElementById("sendBtn").onclick=sendMessage;
+
+document.getElementById("message").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+sendMessage();
+
+}
+
+});
+
+async function sendMessage(){
+
+const input=document.getElementById("message");
+
+const text=input.value.trim();
+
+if(text==="") return;
+
+addUser(text);
+
+input.value="";
+
+addAI("⏳ Thinking...");
+
+try{
+
+const response=await fetch("/chat-api",{
+
+method:"POST",
+
+headers:{
+
+"Content-Type":"application/json"
+
+},
+
+body:JSON.stringify({
+
+message:text
+
+})
+
+});
+
+const data=await response.json();
+
+chat.lastElementChild.remove();
+
+addAI(data.reply);
+
+}catch(e){
+
+chat.lastElementChild.remove();
+
+addAI("❌ Error connecting to AI.");
+
+}
+
+}
+
+</script>
+
+{% endblock %}

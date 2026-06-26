@@ -1,0 +1,361 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card">
+                <i class="fa-solid fa-weight-scale card-icon"></i>
+                <h6>Current Weight</h6>
+                <h2>{{ current_weight }} kg</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card">
+                <i class="fa-solid fa-flag-checkered card-icon"></i>
+                <h6>Starting Weight</h6>
+                <h2>{{ starting_weight }} kg</h2>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card">
+                <i class="fa-solid fa-arrow-trend-down card-icon"></i>
+                <h6>Weight Change</h6>
+
+                {% if weight_change > 0 %}
+                    <h2>+{{ weight_change }} kg</h2>
+                {% elif weight_change < 0 %}
+                    <h2>{{ weight_change }} kg</h2>
+                {% else %}
+                    <h2>0 kg</h2>
+                {% endif %}
+
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+            <div class="dashboard-card">
+                <i class="fa-solid fa-heart-pulse card-icon"></i>
+                <h6>Current BMI</h6>
+                <h2>{{ current_bmi }}</h2>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="glass-card">
+
+        <h2 class="mb-4">
+            📈 Progress Tracker
+        </h2>
+
+        <form method="POST">
+
+            <div class="row">
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Weight (kg)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        name="weight"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Chest (inch)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        name="chest"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Waist (inch)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        name="waist"
+                        class="form-control"
+                        required>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Arms (inch)
+                    </label>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        name="arms"
+                        class="form-control"
+                        required>
+
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+
+                <button class="btn btn-gradient">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Progress
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <br>
+
+    <div class="glass-card">
+
+        <h3>
+
+            📊 Progress History
+
+        </h3>
+
+        <hr>
+
+        {% if progress_list %}
+
+        <table class="table table-hover">
+
+            <thead>
+
+                <tr>
+
+                    <th>Date</th>
+
+                    <th>Weight</th>
+
+                    <th>BMI</th>
+
+                    <th>Chest</th>
+
+                    <th>Waist</th>
+
+                    <th>Arms</th>
+                    
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for item in progress_list %}
+
+                <tr>
+
+                    <td>
+
+                        {{ item.created_at.strftime('%d %b %Y') }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.weight }} kg
+
+                    </td>
+
+                    <td>
+
+                        {{ item.bmi }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.chest }}
+
+                    </td>
+
+                    <td>
+
+                        {{ item.waist }}
+
+                    </td>
+
+                    <td>
+                        {{ item.arms }}
+                    </td>
+                    <td>
+                        <a
+                        href="/delete-progress/{{ item.id }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Delete this entry?')">
+                        <i class="fa-solid fa-trash"></i>
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="text-center p-5">
+
+            <i class="fa-solid fa-chart-line fa-4x text-secondary mb-3"></i>
+
+            <h4>
+
+                No Progress Recorded
+
+            </h4>
+
+            <p>
+
+                Add your first progress entry above.
+
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <br>
+
+    <div class="glass-card">
+
+        <h3>
+
+            📈 Weight Progress
+
+        </h3>
+
+        <hr>
+
+        <canvas id="weightChart" height="100"></canvas>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const labels=[
+{% for item in progress_list|reverse %}
+"{{ item.created_at.strftime('%d %b') }}",
+{% endfor %}
+];
+
+const weights=[
+{% for item in progress_list|reverse %}
+{{ item.weight }},
+{% endfor %}
+];
+
+const canvas=document.getElementById("weightChart");
+
+const ctx=canvas.getContext("2d");
+
+const gradient=ctx.createLinearGradient(0,0,0,300);
+
+gradient.addColorStop(0,"rgba(79,70,229,.45)");
+gradient.addColorStop(1,"rgba(79,70,229,0)");
+
+new Chart(ctx,{
+
+type:"line",
+
+data:{
+
+labels:labels,
+
+datasets:[{
+
+label:"Weight (kg)",
+
+data:weights,
+
+borderColor:"#4F46E5",
+
+backgroundColor:gradient,
+
+fill:true,
+
+borderWidth:3,
+
+pointRadius:5,
+
+pointHoverRadius:8,
+
+tension:.4
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:true
+
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:false
+
+}
+
+}
+
+}
+
+});
+
+</script>
+
+{% endblock %}

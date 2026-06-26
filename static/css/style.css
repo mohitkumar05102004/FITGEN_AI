@@ -1,0 +1,271 @@
+/* ===========================================
+   FitGen AI - Professional Dashboard
+=========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+:root{
+    --primary:#4F46E5;
+    --secondary:#7C3AED;
+    --success:#10B981;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+    --dark:#1F2937;
+    --light:#F5F7FB;
+    --white:#FFFFFF;
+}
+
+body{
+    background:var(--light);
+    color:var(--dark);
+}
+
+/* ================= Sidebar ================= */
+
+.sidebar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:250px;
+    height:100vh;
+    background:linear-gradient(180deg,var(--primary),var(--secondary));
+    color:white;
+    padding:25px;
+    overflow-y:auto;
+    z-index:999;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.logo i{
+    font-size:42px;
+    margin-bottom:10px;
+}
+
+.logo h3{
+    font-weight:700;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:14px 18px;
+    margin-bottom:10px;
+    border-radius:14px;
+    transition:.3s;
+}
+
+.sidebar a:hover{
+    background:rgba(255,255,255,.18);
+    transform:translateX(6px);
+}
+
+.sidebar i{
+    margin-right:10px;
+}
+
+/* ================= Main ================= */
+
+.main-content{
+    margin-left:270px;
+    padding:30px;
+}
+
+.navbar{
+    border-radius:20px;
+}
+
+/* ================= Cards ================= */
+
+.dashboard-card{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 15px 30px rgba(79,70,229,.2);
+    transition:.35s;
+}
+
+.dashboard-card:hover{
+    transform:translateY(-6px);
+}
+
+.dashboard-card h6{
+    margin-top:10px;
+    opacity:.9;
+}
+
+.dashboard-card h2{
+    margin-top:8px;
+    font-weight:700;
+}
+
+.card-icon{
+    font-size:36px;
+}
+
+.glass-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    box-shadow:0 8px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+.glass-card h3{
+    font-weight:700;
+}
+
+/* ================= Workout ================= */
+
+.day-card{
+    border-left:5px solid var(--primary);
+    border-radius:16px;
+    background:#fafafa;
+    padding:18px;
+    margin-bottom:20px;
+    transition:.3s;
+}
+
+.day-card:hover{
+    transform:translateX(5px);
+}
+
+.day-card h5{
+    color:var(--primary);
+    font-weight:700;
+    margin-bottom:12px;
+}
+
+.list-group-item{
+    border:none;
+    padding-left:0;
+    background:transparent;
+}
+
+/* ================= Diet ================= */
+
+.meal-card{
+    border-left:5px solid var(--secondary);
+    background:#faf9ff;
+    padding:18px;
+    border-radius:16px;
+    margin-bottom:15px;
+}
+
+.meal-card h5{
+    color:var(--secondary);
+    font-weight:700;
+}
+
+/* ================= Today's Workout ================= */
+
+.form-check{
+    background:#F9FAFB;
+    border-radius:12px;
+    padding:12px 16px 12px 40px;
+    margin-bottom:12px;
+}
+
+.form-check:hover{
+    background:#EEF2FF;
+}
+
+.progress{
+    height:14px;
+    border-radius:10px;
+}
+
+.progress-bar{
+    background:linear-gradient(90deg,var(--primary),var(--secondary));
+}
+
+/* ================= Buttons ================= */
+
+.btn-gradient{
+    background:linear-gradient(135deg,var(--primary),var(--secondary));
+    color:white;
+    border:none;
+    border-radius:14px;
+    padding:12px 25px;
+    transition:.3s;
+}
+
+.btn-gradient:hover{
+    color:white;
+    transform:scale(1.03);
+}
+
+/* ================= Badge ================= */
+
+.badge{
+    font-size:.9rem;
+    padding:8px 12px;
+    border-radius:12px;
+}
+
+/* ================= Alerts ================= */
+
+.alert{
+    border-radius:16px;
+}
+
+/* ================= Scrollbar ================= */
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:var(--primary);
+    border-radius:20px;
+}
+
+/* ================= Responsive ================= */
+
+@media(max-width:992px){
+
+.sidebar{
+    position:relative;
+    width:100%;
+    height:auto;
+}
+
+.main-content{
+    margin-left:0;
+}
+
+.dashboard-card{
+    margin-bottom:20px;
+}
+
+}
+
+@media(max-width:768px){
+
+.main-content{
+    padding:15px;
+}
+
+.dashboard-card{
+    text-align:center;
+}
+
+.glass-card{
+    padding:18px;
+}
+
+.logo h3{
+    font-size:22px;
+}
+
+}

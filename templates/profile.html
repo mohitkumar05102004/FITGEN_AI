@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+<h2>Complete Your Fitness Profile</h2>
+
+<form method="POST">
+
+<div class="row">
+
+<div class="col-md-6 mb-3">
+<label>Age</label>
+<input type="number" class="form-control" name="age" required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Gender</label>
+
+<select class="form-control" name="gender">
+
+<option>Male</option>
+
+<option>Female</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Height (cm)</label>
+<input type="number" class="form-control" name="height" required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Weight (kg)</label>
+<input type="number" class="form-control" name="weight" required>
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Goal</label>
+
+<select class="form-control" name="goal">
+
+<option>Weight Loss</option>
+
+<option>Weight Gain</option>
+
+<option>Muscle Gain</option>
+
+<option>Stay Fit</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Activity</label>
+
+<select class="form-control" name="activity">
+
+<option>Sedentary</option>
+
+<option>Light</option>
+
+<option>Moderate</option>
+
+<option>Active</option>
+
+<option>Very Active</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Diet</label>
+
+<select class="form-control" name="diet">
+
+<option>Vegetarian</option>
+
+<option>Non-Vegetarian</option>
+
+<option>Vegan</option>
+
+</select>
+
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Daily Budget (₹)</label>
+
+<input type="number" class="form-control" name="budget">
+
+</div>
+
+<div class="col-md-6 mb-3">
+<label>Workout Days</label>
+
+<input type="number"
+min="1"
+max="7"
+class="form-control"
+name="workout_days">
+
+</div>
+
+</div>
+
+<button class="btn btn-success">
+Save Profile
+</button>
+
+</form>
+
+</div>
+
+{% endblock %}
